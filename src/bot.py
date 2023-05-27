@@ -5,6 +5,7 @@ from discord.ext import commands
 
 from bot_state import BotState
 from cogs.categories import Categories
+from cogs.events import Events
 from cogs.subscriptions import Subscriptions
 from utils import mention_user, quote_message
 
@@ -22,6 +23,7 @@ bot.remove_command('help')
 async def on_ready():
     await bot.add_cog(Categories(bot_state))
     await bot.add_cog(Subscriptions(bot_state))
+    await bot.add_cog(Events(bot_state))
 
 @bot.command(name='ping', description='pong')
 async def ping(ctx):

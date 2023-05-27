@@ -67,8 +67,10 @@ class Subscriptions(commands.Cog):
  
     @add.error
     async def add_error(self, ctx, error):
-        await ctx.send(quote_message('.subscription add [name]'))
+        if isinstance(error, commands.MissingRequiredArgument):
+            await ctx.send(quote_message('.subscription add [name]'))
 
     @delete.error
     async def delete_error(self, ctx, error):
-        await ctx.send(quote_message('.subscription delete [name]'))
+        if isinstance(error, commands.MissingRequiredArgument):
+            await ctx.send(quote_message('.subscription delete [name]'))

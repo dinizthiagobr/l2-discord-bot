@@ -46,13 +46,27 @@ class Categories(commands.Cog):
             await ctx.send(quote_message(f'category "{name}" does not exist'))
             return
 
-        self.bot_state.notif_categories.pop(name)
+        # Delete existing events for category
+        for event_id in self.bot_state.category_events.get(name, []):
+            del self.bot_state.events[event_id]
+
+        del self.bot_state.category_events[name]
+
+        # Delete existing subscriptions to category
+        for user_subscriptions in self.bot_state.member_categories_subscriptions.values():
+            if name in user_subscriptions:
+                user_subscriptions.remove(name)
+
+        del self.bot_state.notif_categories[name]
+
         await ctx.send(quote_message(f'category "{name}" deleted'))
 
     @add.error
     async def add_error(self, ctx, error):
-        await ctx.send(quote_message('.config add [name] [description]'))
+        if isinstance(error, commands.MissingRequiredArgument):
+            await ctx.send(quote_message('.config add [name] [description]'))
 
     @delete.error
     async def delete_error(self, ctx, error):
-        await ctx.send(quote_message('.config delete [name]'))
+        if isinstance(error, commands.MissingRequiredArgument):
+            await ctx.send(quote_message('.config delete [name]'))
