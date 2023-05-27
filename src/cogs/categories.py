@@ -64,9 +64,9 @@ class Categories(commands.Cog):
     @add.error
     async def add_error(self, ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
-            await ctx.send(quote_message('.config add [name] [description]'))
+            await ctx.send(quote_message('.category add [name] [description]'))
 
     @delete.error
     async def delete_error(self, ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
-            await ctx.send(quote_message('.config delete [name]'))
+            await ctx.send(quote_message('.category delete [name]'))
