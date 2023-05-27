@@ -20,12 +20,12 @@ class Events(commands.Cog):
     @event.command(name='list', description='List all events from subscribed categories')
     async def list_all_subscribed(self, ctx):
         user_id = ctx.author.id
-        user_subscriptions = self.bot_state.member_categories_subscriptions.get(user_id, [])
+        user_subscriptions = self.bot_state.userid_to_categories.get(user_id, [])
 
         help_text = f'future events for {ctx.author.name}:\n'
 
         for subscribed_category_name in user_subscriptions:
-            category_event_ids = self.bot_state.category_events.get(subscribed_category_name, [])
+            category_event_ids = self.bot_state.categoryname_to_events.get(subscribed_category_name, [])
             for event_id in category_event_ids:
                 event = self.bot_state.events[event_id]
                 help_text += f'({event_id}) {event.name}: {event.timestamp}'
@@ -34,12 +34,12 @@ class Events(commands.Cog):
 
     @event.command(name='add', description='Add event')
     async def add(self, ctx, name: str, category_name: str, timestamp: str):
-        if not self.bot_state.notif_categories.get(category_name):
+        if not self.bot_state.categories.get(category_name):
             await ctx.send(quote_message(f'category "{category_name}" does not exist'))
             return
         
         user_id = ctx.author.id
-        user_subscriptions = self.bot_state.member_categories_subscriptions.get(user_id, [])
+        user_subscriptions = self.bot_state.userid_to_categories.get(user_id, [])
 
         if not category_name in user_subscriptions:
             await ctx.send(quote_message(f'{ctx.author.name} not subscribed to category "{category_name}"'))
@@ -50,10 +50,10 @@ class Events(commands.Cog):
         new_event = Event(event_id, name, timestamp, category_name, user_id)
         self.bot_state.events[event_id] = new_event
 
-        if not self.bot_state.category_events.get(category_name):
-            self.bot_state.category_events[category_name] = []
+        if not self.bot_state.categoryname_to_events.get(category_name):
+            self.bot_state.categoryname_to_events[category_name] = []
 
-        self.bot_state.category_events[category_name].append(event_id)
+        self.bot_state.categoryname_to_events[category_name].append(event_id)
 
         await ctx.send(quote_message(f'{ctx.author.name} created event "{event_id}"'))
 
@@ -71,7 +71,7 @@ class Events(commands.Cog):
             return
 
         del self.bot_state.events[event_id]
-        self.bot_state.category_events.get(event.category_name).remove(event_id)
+        self.bot_state.categoryname_to_events.get(event.category_name).remove(event_id)
 
         await ctx.send(quote_message(f'{ctx.author.name} deleted event "{event_id}"'))
 

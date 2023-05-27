@@ -25,11 +25,13 @@ async def on_ready():
     await bot.add_cog(Subscriptions(bot_state))
     await bot.add_cog(Events(bot_state))
 
-@bot.command(name='ping', description='pong')
+@bot.command(name='ping', description='pong', hidden=True)
+@commands.is_owner()
 async def ping(ctx):
     await ctx.send(quote_message('pong'))
 
-@bot.command(name='me', description='mention me')
+@bot.command(name='me', description='mention me', hidden=True)
+@commands.is_owner()
 async def ping(ctx):
     await ctx.send(mention_user(ctx.author.id))
 
@@ -38,7 +40,8 @@ async def list_commands(ctx):
     help_text = ''
 
     for command in bot.commands:
-        help_text += f'.{command} -> {command.description}\n'
+        if not command.hidden:
+            help_text += f'.{command} -> {command.description}\n'
 
     await ctx.send(quote_message(help_text))
 

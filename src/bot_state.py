@@ -4,7 +4,7 @@ from models.notif_category import NotificationCategory
 
 class BotState:
     def __init__(self):
-        self.notif_categories: Dict[str, NotificationCategory] = {}
-        self.member_categories_subscriptions: Dict[str, List[str]] = {}
-        self.category_events: Dict[str, List[str]] = {}
+        self.categories: Dict[str, NotificationCategory] = {}
+        self.userid_to_categories: Dict[str, List[str]] = {}
+        self.categoryname_to_events: Dict[str, List[str]] = {}
         self.events: Dict[str, Event] = {}
