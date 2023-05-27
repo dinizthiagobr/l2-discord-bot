@@ -1,1 +1,2 @@
 TIME_DELTA_REGEX = r'(\d{1,2}[d])?(\d{1,2}[h])?(\d{1,2}[m])?'
+EVENT_NOTIFICATION_THRESHOLD_SECONDS = 10 * 60

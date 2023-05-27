@@ -4,6 +4,7 @@ from models.notif_category import NotificationCategory
 
 class BotState:
     def __init__(self):
+        self.notif_channel_id: int = None
         self.categories: Dict[str, NotificationCategory] = {}
         self.userid_to_categories: Dict[str, List[str]] = {}
         self.categoryname_to_events: Dict[str, List[str]] = {}
