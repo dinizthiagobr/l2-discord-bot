@@ -5,4 +5,4 @@ def mention_user(user_id: str):
     return f'<@{user_id}>'
 
 def create_timestamp(timestamp: str):
-    return f'<t:{timestamp}:f> -> <t:{timestamp}:R>'
+    return f'<t:{timestamp}:R> (<t:{timestamp}:f>)'

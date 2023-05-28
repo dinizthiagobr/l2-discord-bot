@@ -1,4 +1,5 @@
-from utils import create_timestamp
+from constants import EVENT_NOTIFICATION_THRESHOLD_SECONDS
+from utils import create_timestamp, quote_message
 
 
 class Event:

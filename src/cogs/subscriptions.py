@@ -48,6 +48,7 @@ class Subscriptions(commands.Cog):
 
         user_subscriptions.append(category_name)
         self.bot_state.userid_to_categories[user_id] = user_subscriptions
+        self.bot_state.categories[category_name].user_ids.append(user_id)
 
         await ctx.send(quote_message(f'{ctx.author.name} subscribed to "{category_name}"'))
 
@@ -62,6 +63,7 @@ class Subscriptions(commands.Cog):
 
         user_subscriptions.remove(category_name)
         self.bot_state.userid_to_categories[user_id] = user_subscriptions
+        self.bot_state.categories[category_name].user_ids.remove(user_id)
 
         await ctx.send(quote_message(f'{ctx.author.name} unsubscribed from "{category_name}"'))
  
@@ -69,8 +71,12 @@ class Subscriptions(commands.Cog):
     async def add_error(self, ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
             await ctx.send(quote_message('.subscription add [name]'))
+        else:
+            raise error
 
     @delete.error
     async def delete_error(self, ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
             await ctx.send(quote_message('.subscription delete [name]'))
+        else:
+            raise error
